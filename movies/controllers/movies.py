@@ -1,0 +1,33 @@
+from ninja import Router
+from pydantic.types import UUID4
+
+from movies.models import Movie
+from movies.schemas.movies import MovieOut
+from utils.schemas import MessageOut
+
+movies_controller = Router(tags=['Movies'])
+
+
+@movies_controller.get('', response={200: list[MovieOut], 404: MessageOut})
+def list_movies(request):
+    movies = Movie.objects.all()
+    if movies:
+        return 200, movies
+    return 404, {'msg': 'There are no movies yet.'}
+
+
+@movies_controller.get('/featured', response={200: list[MovieOut], 404: MessageOut})
+def featured_movies(request):
+    movies = Movie.objects.filter(is_featured=True).order_by('-rating')
+    if movies:
+        return 200, movies
+    return 404, {'msg': 'There are no featured movies.'}
+
+
+@movies_controller.get('/{id}', response={200: MovieOut, 404: MessageOut})
+def get_movie(request, id: UUID4):
+    try:
+        movie = Movie.objects.get()
+        return 200, movie
+    except Movie.DoesNotExist:
+        return 404, {'msg': 'There is no movie with that id.'}

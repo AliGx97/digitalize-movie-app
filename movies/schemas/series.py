@@ -1,17 +1,20 @@
 from ninja import Schema
 import datetime
 
-from pydantic.types import Decimal, UUID4
+from pydantic.types import Decimal, UUID4, Optional
 
 from movies.schemas.Actor import ActorOut
 from movies.schemas.categories import CategoryOut
+from movies.schemas.seasons import SeasonOut
 
 
 class SerialOut(Schema):
     id: UUID4
     title: str
     description: str
-    trailer_url: str
+    image: str
+    thumbnail: str
+    trailer_url: Optional = str
     release_date: datetime.date
     rating: Decimal
     categories: list[CategoryOut]
@@ -19,4 +22,4 @@ class SerialOut(Schema):
 
 
 class FullSerialOut(SerialOut):
-    seasons: list[UUID4]
+    seasons: list[SeasonOut]

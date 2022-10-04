@@ -27,6 +27,7 @@ def upload_image(obj, image_file):
         )
         if res.ok:
             obj.image = res.json()['data']['url']
+            obj.thumbnail = res.json()['data']['thumb']['url']
         else:
             obj.image = None
     return obj

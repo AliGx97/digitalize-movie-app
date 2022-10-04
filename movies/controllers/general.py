@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, Value
 from ninja import Router, Query
 from itertools import chain
 from movies.models import Movie, Serial
@@ -13,9 +13,12 @@ home_controller = Router(tags=['Home'])
 
 @home_controller.get('/search', response={200: list[MovieSerialOut], 404: MessageOut})
 def search(request, q: str = ' ', page: int = 1):
-    qs = (Q(title__icontatins=q) | Q(description__icontains=q))
-    movies = Movie.objects.filter(qs).order_by('-rating').values().annotate(is_movie=True)
-    series = Serial.objects.filter(qs).order_by('-rating').values().annotate(is_movie=False)
+    qs = (Q(title__icontains=q) | Q(description__icontains=q))
+    movies = Movie.objects.filter(qs).order_by('-rating').annotate(is_movie=Value(True))
+
+    series = Serial.objects.filter(qs).order_by(
+        '-rating').annotate(is_movie=Value(False))
+    
     if not movies and not series:
         return 404, {'msg': 'There are no matches.'}
     data = chain(movies, series)
@@ -27,8 +30,8 @@ def search(request, q: str = ' ', page: int = 1):
 
 
 @home_controller.get('/search/movies', response={200: list[MovieOut], 404: MessageOut})
-def search(request, q: str = ' '):
-    qs = (Q(title__icontatins=q) | Q(description__icontains=q))
+def search_movies(request, q: str = ' '):
+    qs = (Q(title__icontains=q) | Q(description__icontains=q))
     movies = Movie.objects.filter(qs).order_by('-rating')
     if not movies:
         return 404, {'msg': 'There are no matches.'}
@@ -36,9 +39,9 @@ def search(request, q: str = ' '):
 
 
 @home_controller.get('/search/series', response={200: list[SerialOut], 404: MessageOut})
-def search(request, q: str = ' '):
-    qs = (Q(title__icontatins=q) | Q(description__icontains=q))
-    series = Movie.objects.filter(qs).order_by('-rating')
+def search_series(request, q: str = ' '):
+    qs = (Q(title__icontains=q) | Q(description__icontains=q))
+    series = Serial.objects.filter(qs).order_by('-rating')
     if not series:
         return 404, {'msg': 'There are no matches.'}
     return 200, list(series)

@@ -14,11 +14,11 @@ from movies.controllers.series import series_controller
 
 api = NinjaAPI()
 api.add_router('/account', account_controller)
-api.add_router('', home_controller, auth=TokenAuthentication)
-api.add_router('/categories', categories_controller, auth=TokenAuthentication)
-api.add_router('/movies', movies_controller, auth=TokenAuthentication)
-api.add_router('/series', series_controller, auth=TokenAuthentication)
-api.add_router('/news', news_controller, auth=TokenAuthentication)
+api.add_router('', home_controller)
+api.add_router('/categories', categories_controller)
+api.add_router('/movies', movies_controller)
+api.add_router('/series', series_controller)
+api.add_router('/news', news_controller)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', api.urls)

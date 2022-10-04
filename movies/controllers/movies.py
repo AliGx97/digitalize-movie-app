@@ -1,6 +1,7 @@
 from ninja import Router
 from pydantic.types import UUID4
 
+from account.authorization import TokenAuthentication
 from movies.models import Movie
 from movies.schemas.movies import MovieOut
 from utils.schemas import MessageOut
@@ -24,10 +25,18 @@ def featured_movies(request):
     return 404, {'msg': 'There are no featured movies.'}
 
 
+@movies_controller.get('/favorites', auth=TokenAuthentication(), response={200: list[MovieOut], 404: MessageOut})
+def favorite_movies(request):
+    movies = Movie.objects.filter(is_featured=True).order_by('-rating')
+    if movies:
+        return 200, movies
+    return 404, {'msg': 'There are no featured movies.'}
+
+
 @movies_controller.get('/{id}', response={200: MovieOut, 404: MessageOut})
 def get_movie(request, id: UUID4):
     try:
-        movie = Movie.objects.get()
+        movie = Movie.objects.get(id=id)
         return 200, movie
     except Movie.DoesNotExist:
         return 404, {'msg': 'There is no movie with that id.'}

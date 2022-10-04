@@ -16,7 +16,7 @@ class NewForm(forms.ModelForm):
 
 class NewAdmin(admin.ModelAdmin):
     form = NewForm
-    readonly_fields = ['image']
+    readonly_fields = ['id', 'image']
 
     def save_model(self, request, obj, form, change):
         print(request.POST)

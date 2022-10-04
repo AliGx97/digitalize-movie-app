@@ -1,6 +1,8 @@
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 # Create your models here.
 from utils.models import Entity
 
@@ -28,6 +30,7 @@ class CommonDetail(Entity):
 class Movie(CommonDetail):
     is_featured = models.BooleanField(default=False)
     categories = models.ManyToManyField(Category, related_name='movies')
+    user = models.ManyToManyField(User, related_name='favorites')
 
     def __str__(self):
         return self.title
@@ -40,6 +43,7 @@ class Movie(CommonDetail):
 class Serial(CommonDetail):
     is_featured = models.BooleanField(default=False)
     categories = models.ManyToManyField(Category, related_name='series')
+    user = models.ManyToManyField(User, related_name='favorites')
 
     def __str__(self):
         return self.title

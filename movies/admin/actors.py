@@ -14,7 +14,7 @@ class ActorForm(forms.ModelForm):
 
 class ActorAdmin(admin.ModelAdmin):
     form = ActorForm
-    readonly_fields = ['image']
+    readonly_fields = ['id', 'image']
 
     def save_model(self, request, obj, form, change):
         # Uploading image

@@ -14,7 +14,7 @@ class SerialForm(forms.ModelForm):
 
 class SerialAdmin(admin.ModelAdmin):
     form = SerialForm
-    readonly_fields = ['image']
+    readonly_fields = ['id', 'image']
 
     def save_model(self, request, obj, form, change):
         # Uploading image

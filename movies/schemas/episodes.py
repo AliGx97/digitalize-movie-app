@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 from ninja import Schema
 from pydantic.types import UUID4, Decimal

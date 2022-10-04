@@ -14,7 +14,7 @@ class EpisodeForm(forms.ModelForm):
 
 class EpisodeAdmin(admin.ModelAdmin):
     form = EpisodeForm
-    readonly_fields = ['image']
+    readonly_fields = ['id', 'image']
 
     def save_model(self, request, obj, form, change):
         # Uploading image

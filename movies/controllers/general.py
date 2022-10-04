@@ -8,10 +8,10 @@ from movies.schemas.movies import MovieOut
 from movies.schemas.series import SerialOut
 from utils.schemas import MessageOut
 
-home_router = Router('Home')
+home_controller = Router(tags=['Home'])
 
 
-@home_router.get('/search', response={200: list[MovieSerialOut], 404: MessageOut})
+@home_controller.get('/search', response={200: list[MovieSerialOut], 404: MessageOut})
 def search(request, q: str = ' ', page: int = 1):
     qs = (Q(title__icontatins=q) | Q(description__icontains=q))
     movies = Movie.objects.filter(qs).order_by('-rating').values().annotate(is_movie=True)
@@ -26,7 +26,7 @@ def search(request, q: str = ' ', page: int = 1):
     return 200, list(sorted_data)
 
 
-@home_router.get('/search/movies', response={200: list[MovieOut], 404: MessageOut})
+@home_controller.get('/search/movies', response={200: list[MovieOut], 404: MessageOut})
 def search(request, q: str = ' '):
     qs = (Q(title__icontatins=q) | Q(description__icontains=q))
     movies = Movie.objects.filter(qs).order_by('-rating')
@@ -35,7 +35,7 @@ def search(request, q: str = ' '):
     return 200, list(movies)
 
 
-@home_router.get('/search/series', response={200: list[SerialOut], 404: MessageOut})
+@home_controller.get('/search/series', response={200: list[SerialOut], 404: MessageOut})
 def search(request, q: str = ' '):
     qs = (Q(title__icontatins=q) | Q(description__icontains=q))
     series = Movie.objects.filter(qs).order_by('-rating')

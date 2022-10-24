@@ -11,7 +11,7 @@ class NewForm(forms.ModelForm):
         model = New
         fields = '__all__'
 
-    image_file = forms.FileField()
+    image_file = forms.FileField(required=False)
 
 
 class NewAdmin(admin.ModelAdmin):

@@ -46,7 +46,7 @@ def get_seasons(request, id: UUID4):
 
 
 @series_controller.get('/{serial_id}/seasons/{season_id}', response={200: list[EpisodeOut], 404: MessageOut})
-def get_episodes(request, serial_id: UUID4, season_id: UUID4):
+def list_episodes(request, serial_id: UUID4, season_id: UUID4):
     try:
         season = Season.objects.get(id=season_id, serial__id=serial_id)
         episodes = season.episodes.all().order_by('number')

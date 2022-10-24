@@ -17,6 +17,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -118,3 +119,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'uot.clearance@gmail.com'
 EMAIL_HOST_PASSWORD = 'idzdbhkfbpkajqii'
+JAZZMIN_SETTINGS = {"show_ui_builder": True}

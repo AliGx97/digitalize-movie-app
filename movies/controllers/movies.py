@@ -27,7 +27,7 @@ def featured_movies(request):
 
 @movies_controller.get('/favorites', auth=TokenAuthentication(), response={200: list[MovieOut], 404: MessageOut})
 def favorite_movies(request):
-    movies = Movie.objects.filter(is_featured=True).order_by('-rating')
+    movies = Movie.objects.filter(user__exact=request.auth['id']).order_by('-rating')
     if movies:
         return 200, movies
     return 404, {'msg': 'There are no featured movies.'}

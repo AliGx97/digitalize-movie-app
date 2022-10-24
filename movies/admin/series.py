@@ -9,12 +9,13 @@ class SerialForm(forms.ModelForm):
         model = Serial
         fields = '__all__'
 
-    image_file = forms.FileField()
+    image_file = forms.FileField(required=False)
 
 
 class SerialAdmin(admin.ModelAdmin):
     form = SerialForm
     readonly_fields = ['id', 'image', 'thumbnail']
+    search_fields = ['title']
 
     def save_model(self, request, obj, form, change):
         # Uploading image

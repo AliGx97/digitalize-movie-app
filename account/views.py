@@ -5,7 +5,8 @@ from pydantic import EmailStr, Field
 import requests
 from account.authorization import PasswordResetTokenAuthentication
 from account.models import Otp
-from account.schemas import AccountCreateBody, AccountOut, AccountLoginBody, PasswordResetToken, PasswordSchema, OtpIn
+from account.schemas import AccountCreateBody, AccountOut, AccountLoginBody, PasswordResetToken, PasswordSchema, OtpIn, \
+    AccountUpdate
 from account.authorization import TokenAuthentication, get_tokens_for_user
 from django.contrib.auth import get_user_model, authenticate
 from ninja import Router, File
@@ -142,3 +143,18 @@ def change_password(request, payload: PasswordSchema):
 def get_user_info(request):
     user = get_object_or_404(User, id=request.auth['id'])
     return model_to_dict(user)
+
+
+@account_controller.put('/me', auth=TokenAuthentication(), response={200: MessageOut})
+def update_user_info(request, payload: AccountUpdate):
+    user = User.objects.get(id=request.auth['id'])
+    if payload.name:
+        user.name = payload.name
+    if payload.gender in ['Male', 'Female']:
+        user.gender = payload.gender
+    if payload.birth_date:
+        user.birth_date = payload.birth_date
+    if payload.phone:
+        user.phone = payload.phone
+    user.save()
+    return 200, {'msg': 'Information updated successfully.'}

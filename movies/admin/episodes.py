@@ -12,6 +12,7 @@ class EpisodeForm(forms.ModelForm):
 class EpisodeAdmin(admin.ModelAdmin):
     form = EpisodeForm
     readonly_fields = ['id']
+    search_fields = ['title']
 
     def save_model(self, request, obj, form, change):
         time = int(obj.length)

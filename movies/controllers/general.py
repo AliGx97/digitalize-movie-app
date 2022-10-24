@@ -11,22 +11,22 @@ from utils.schemas import MessageOut
 home_controller = Router(tags=['Home'])
 
 
-@home_controller.get('/search', response={200: list[MovieSerialOut], 404: MessageOut})
-def search(request, q: str = ' ', page: int = 1):
-    qs = (Q(title__icontains=q) | Q(description__icontains=q))
-    movies = Movie.objects.filter(qs).order_by('-rating').annotate(is_movie=Value(True))
-
-    series = Serial.objects.filter(qs).order_by(
-        '-rating').annotate(is_movie=Value(False))
-    
-    if not movies and not series:
-        return 404, {'msg': 'There are no matches.'}
-    data = chain(movies, series)
-    sorted_data = sorted(data, key=lambda x: x.rating)
-    sorted_data = Paginator(sorted_data, 20)
-    if sorted_data.num_pages >= page:
-        return 200, list(sorted_data.page(page).object_list)
-    return 200, list(sorted_data)
+# @home_controller.get('/search', response={200: list[MovieSerialOut], 404: MessageOut})
+# def search(request, q: str = ' ', page: int = 1):
+#     qs = (Q(title__icontains=q) | Q(description__icontains=q))
+#     movies = Movie.objects.filter(qs).order_by('-rating').annotate(is_movie=Value(True))
+#
+#     series = Serial.objects.filter(qs).order_by(
+#         '-rating').annotate(is_movie=Value(False))
+#
+#     if not movies and not series:
+#         return 404, {'msg': 'There are no matches.'}
+#     data = chain(movies, series)
+#     sorted_data = sorted(data, key=lambda x: x.rating)
+#     sorted_data = Paginator(sorted_data, 20)
+#     if sorted_data.num_pages >= page:
+#         return 200, list(sorted_data.page(page).object_list)
+#     return 200, list(sorted_data)
 
 
 @home_controller.get('/search/movies', response={200: list[MovieOut], 404: MessageOut})

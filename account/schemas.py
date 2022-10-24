@@ -1,3 +1,5 @@
+import datetime
+
 from ninja import Schema
 from ninja import Field
 from pydantic import EmailStr
@@ -34,3 +36,10 @@ class PasswordResetToken(Schema):
 
 class OtpIn(Schema):
     otp: int = Field(..., ge=1000, le=9999)
+
+
+class AccountUpdate(Schema):
+    name: str = None
+    gender: str = None
+    phone: str = None
+    birth_date: datetime.datetime = None

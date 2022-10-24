@@ -9,12 +9,14 @@ class ActorForm(forms.ModelForm):
         model = Actor
         fields = '__all__'
 
-    image_file = forms.FileField()
+    image_file = forms.FileField(required=False)
 
 
 class ActorAdmin(admin.ModelAdmin):
     form = ActorForm
     readonly_fields = ['id', 'image']
+
+    # autocomplete_fields = ['series', 'movies', 'episodes']
 
     def save_model(self, request, obj, form, change):
         # Uploading image

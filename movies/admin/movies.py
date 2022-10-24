@@ -9,12 +9,13 @@ class MovieForm(forms.ModelForm):
         model = Movie
         fields = '__all__'
 
-    image_file = forms.FileField()
+    image_file = forms.FileField(required=False)
 
 
 class MovieAdmin(admin.ModelAdmin):
     form = MovieForm
     readonly_fields = ['id', 'image', 'thumbnail']
+    search_fields = ['title']
 
     def save_model(self, request, obj, form, change):
         # Convert number of minutes to sting representation

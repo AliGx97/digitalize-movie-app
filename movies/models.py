@@ -1,10 +1,18 @@
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.contrib.auth import get_user_model
+import uuid
 
 User = get_user_model()
-# Create your models here.
-from utils.models import Entity
+
+
+class Entity(models.Model):
+    class Meta:
+        abstract = True
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now_add=True, null=False, db_column='created_at')
+    updated = models.DateTimeField(auto_now=True, null=False, db_column='updated_at')
 
 
 class Category(Entity):
@@ -100,7 +108,7 @@ class New(Entity):
 
 class Actor(Entity):
     name = models.CharField(max_length=50)
-    image = models.URLField(null=True)
+    image = models.URLField(null=True, blank=True)
     movies = models.ManyToManyField(Movie, related_name='actors', blank=True)
     series = models.ManyToManyField(Serial, related_name='actors', blank=True)
     episodes = models.ManyToManyField(Episode, related_name='guest_actors', blank=True)

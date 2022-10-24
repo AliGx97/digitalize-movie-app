@@ -11,7 +11,7 @@ movies_controller = Router(tags=['Movies'])
 
 @movies_controller.get('', response={200: list[MovieOut], 404: MessageOut})
 def list_movies(request):
-    movies = Movie.objects.all()
+    movies = Movie.objects.prefetch_related('categories', 'actors').all()
     if movies:
         return 200, movies
     return 404, {'msg': 'There are no movies yet.'}

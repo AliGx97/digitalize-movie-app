@@ -12,7 +12,8 @@ series_controller = Router(tags=['Series'])
 
 @series_controller.get('', response={200: list[SerialOut], 404: MessageOut})
 def list_series(request):
-    series = Serial.objects.all().order_by('title')
+    series = Serial.objects.prefetch_related('categories', 'seasons', 'seasons__episodes', 'actors').all().order_by(
+        'title')
     if series:
         return 200, series
     return 404, {'msg': 'There are no series yet.'}

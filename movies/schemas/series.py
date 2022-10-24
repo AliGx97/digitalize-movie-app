@@ -12,8 +12,8 @@ class SerialOut(Schema):
     id: UUID4
     title: str
     description: str
-    image: str
-    thumbnail: str
+    image: str = None
+    thumbnail: str = None
     trailer_url: Optional = str
     release_date: datetime.date
     rating: Decimal

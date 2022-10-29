@@ -36,3 +36,4 @@ class NewAdmin(admin.ModelAdmin):
 
 
 admin.site.register(New, NewAdmin)
+# admin.site.register(New)

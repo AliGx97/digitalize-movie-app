@@ -34,6 +34,25 @@ class CommonDetail(Entity):
     trailer_url = models.URLField(null=True, blank=True)
 
 
+class Actor(Entity):
+    name = models.CharField(max_length=50)
+    image = models.URLField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def all_movies(self):
+        return self.movies.all()
+
+    @property
+    def all_series(self):
+        return self.series.all()
+
+    def get_all_series(self):
+        return self.series.all()
+
+
 class Movie(CommonDetail):
     is_featured = models.BooleanField(default=False)
     length = models.CharField(max_length=6)
@@ -41,13 +60,14 @@ class Movie(CommonDetail):
     user = models.ManyToManyField(User, related_name='favorite_movies', blank=True)
     image = models.URLField(null=True)
     thumbnail = models.URLField(null=True, editable=False)
+    movie_actors = models.ManyToManyField(Actor, related_name='movies', blank=True)
 
     def __str__(self):
         return self.title
 
     @property
     def actors(self):
-        return self.actors.all()
+        return self.movie_actors.all()
 
 
 class Serial(CommonDetail):
@@ -56,6 +76,7 @@ class Serial(CommonDetail):
     user = models.ManyToManyField(User, related_name='favorite_series', blank=True)
     image = models.URLField(null=True)
     thumbnail = models.URLField(null=True, editable=False)
+    serial_actors = models.ManyToManyField(Actor, related_name='series', blank=True)
 
     def __str__(self):
         return self.title
@@ -65,7 +86,7 @@ class Serial(CommonDetail):
         return self.actors.all()
 
     @property
-    def seasons(self):
+    def all_seasons(self):
         return self.seasons.all()
 
 
@@ -83,13 +104,14 @@ class Episode(CommonDetail):
         validators=[MinValueValidator(1, message='Minimum season for any episode is 1')])
     season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name='episodes')
     length = models.CharField(max_length=6)
+    guest_actors = models.ManyToManyField(Actor, related_name='episodes', blank=True)
 
     def __str__(self):
         return f'{self.season} || {self.title}'
 
     @property
     def actors(self):
-        return self.season.serial.actors.all() + self.actors.all()
+        return list(self.season.serial.serial_actors.all()) + list(self.guest_actors.all())
 
     @property
     def image(self):
@@ -104,11 +126,3 @@ class New(Entity):
 
     def __str__(self):
         return self.title
-
-
-class Actor(Entity):
-    name = models.CharField(max_length=50)
-    image = models.URLField(null=True, blank=True)
-    movies = models.ManyToManyField(Movie, related_name='actors', blank=True)
-    series = models.ManyToManyField(Serial, related_name='actors', blank=True)
-    episodes = models.ManyToManyField(Episode, related_name='guest_actors', blank=True)

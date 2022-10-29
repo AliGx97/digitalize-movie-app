@@ -18,4 +18,4 @@ class MovieOut(Schema):
     release_date: datetime.date
     rating: Decimal
     categories: list[CategoryOut]
-    actors: list[ActorOut]
+    movie_actors: list[ActorOut]

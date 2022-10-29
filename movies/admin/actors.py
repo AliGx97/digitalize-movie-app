@@ -14,7 +14,7 @@ class ActorForm(forms.ModelForm):
 
 class ActorAdmin(admin.ModelAdmin):
     form = ActorForm
-    readonly_fields = ['id', 'image']
+    readonly_fields = ['id']
 
     # autocomplete_fields = ['series', 'movies', 'episodes']
 
@@ -25,3 +25,4 @@ class ActorAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Actor, ActorAdmin)
+# admin.site.register(Actor)

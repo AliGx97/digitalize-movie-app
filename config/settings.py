@@ -1,4 +1,19 @@
 from pathlib import Path
+import pretty_errors
+
+pretty_errors.configure(
+    separator_character='*',
+    filename_display=pretty_errors.FILENAME_EXTENDED,
+    line_number_first=True,
+    display_link=True,
+    lines_before=5,
+    lines_after=2,
+    line_color=pretty_errors.RED + '> ' + pretty_errors.default_config.line_color,
+    code_color='  ' + pretty_errors.default_config.line_color,
+    truncate_code=True,
+    display_locals=True
+)
+pretty_errors.replace_stderr()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,8 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@0w^vv5o257_t4m*d4r#_^!acd3%7@av$=7@l@&^cdnmzo$vm#'
 SECOND_SECRET_KEY = 'Some-random-secret-key-with-234#@$$-symbols-and-numbers321'
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -27,13 +42,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'account',
     'movies',
-    # 'silk',
+    'silk',
+    'django_extensions',
 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # 'silk.middleware.SilkyMiddleware',
+    'silk.middleware.SilkyMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -106,8 +122,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static_files/'
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media_files/'
+# MEDIA_URL = 'media/'
+# MEDIA_ROOT = BASE_DIR / 'media_files/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -123,7 +139,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'uot.clearance@gmail.com'
 EMAIL_HOST_PASSWORD = 'idzdbhkfbpkajqii'
 # JAZZMIN_SETTINGS = {"show_ui_builder": True}
-
 JAZZMIN_UI_TWEAKS = {
     "navbar_small_text": False,
     "footer_small_text": False,
@@ -131,7 +146,7 @@ JAZZMIN_UI_TWEAKS = {
     "brand_small_text": False,
     "brand_colour": False,
     "accent": "accent-primary",
-    "navbar": "navbar-dark",
+    "navbar": "navbar-white navbar-light",
     "no_navbar_border": False,
     "navbar_fixed": False,
     "layout_boxed": False,
@@ -144,11 +159,11 @@ JAZZMIN_UI_TWEAKS = {
     "sidebar_nav_compact_style": False,
     "sidebar_nav_legacy_style": False,
     "sidebar_nav_flat_style": False,
-    "theme": "darkly",
-    "dark_mode_theme": None,
+    "theme": "flatly",
+    "dark_mode_theme": "darkly",
     "button_classes": {
-        "primary": "btn-primary",
-        "secondary": "btn-secondary",
+        "primary": "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
         "info": "btn-outline-info",
         "warning": "btn-outline-warning",
         "danger": "btn-outline-danger",

@@ -3,6 +3,12 @@ from django import forms
 from movies.models import Episode
 
 
+class EpisodeInline(admin.StackedInline):
+    model = Episode
+    fields = ['title', 'description', 'release_date', 'number', 'length', 'guest_actors']
+    extra = 1
+
+
 class EpisodeForm(forms.ModelForm):
     class Meta:
         model = Episode
@@ -23,3 +29,4 @@ class EpisodeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Episode, EpisodeAdmin)
+# admin.site.register(Episode)

@@ -24,3 +24,4 @@ class SerialAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Serial, SerialAdmin)
+# admin.site.register(Serial)

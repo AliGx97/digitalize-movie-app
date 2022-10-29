@@ -1,3 +1,5 @@
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from ninja import Router
 from pydantic.types import UUID4
 
@@ -6,12 +8,14 @@ from movies.models import Movie
 from movies.schemas.movies import MovieOut
 from utils.schemas import MessageOut
 
+User = get_user_model()
+
 movies_controller = Router(tags=['Movies'])
 
 
 @movies_controller.get('', response={200: list[MovieOut], 404: MessageOut})
 def list_movies(request):
-    movies = Movie.objects.prefetch_related('categories', 'actors').all()
+    movies = Movie.objects.prefetch_related('categories', 'movie_actors').all()
     if movies:
         return 200, movies
     return 404, {'msg': 'There are no movies yet.'}

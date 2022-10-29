@@ -42,4 +42,13 @@ class AccountUpdate(Schema):
     name: str = None
     gender: str = None
     phone: str = None
-    birth_date: datetime.datetime = None
+    birth_date: datetime.date = None
+
+
+class AccountInfo(Schema):
+    name: str
+    email: EmailStr
+    profile: str = None
+    gender: str = None
+    phone: str = None
+    birth_date: datetime.date = None

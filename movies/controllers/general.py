@@ -2,8 +2,8 @@ from django.core.paginator import Paginator
 from django.db.models import Q, Value
 from ninja import Router, Query
 from itertools import chain
-from movies.models import Movie, Serial
-from movies.schemas.general import MovieSerialOut
+from movies.models import Movie, Serial, Episode
+from movies.schemas.general import MovieSerialOut, AllEpisodes
 from movies.schemas.movies import MovieOut
 from movies.schemas.series import SerialOut
 from utils.schemas import MessageOut
@@ -35,6 +35,7 @@ def search_movies(request, q: str = ' '):
     movies = Movie.objects.filter(qs).order_by('-rating')
     if not movies:
         return 404, {'msg': 'There are no matches.'}
+
     return 200, list(movies)
 
 
@@ -45,3 +46,10 @@ def search_series(request, q: str = ' '):
     if not series:
         return 404, {'msg': 'There are no matches.'}
     return 200, list(series)
+
+
+@home_controller.get('all-episodes-of-all-series', response={200: list[AllEpisodes]})
+def get_all_episodes(request):
+    episodes = Episode.objects.prefetch_related('guest_actors', 'season__serial__serial_actors').select_related(
+        'season', 'season__serial').all()
+    return 200, episodes

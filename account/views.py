@@ -6,7 +6,7 @@ import requests
 from account.authorization import PasswordResetTokenAuthentication
 from account.models import Otp
 from account.schemas import AccountCreateBody, AccountOut, AccountLoginBody, PasswordResetToken, PasswordSchema, OtpIn, \
-    AccountUpdate
+    AccountUpdate, AccountInfo
 from account.authorization import TokenAuthentication, get_tokens_for_user
 from django.contrib.auth import get_user_model, authenticate
 from ninja import Router, File
@@ -139,10 +139,10 @@ def change_password(request, payload: PasswordSchema):
     }
 
 
-@account_controller.get('/me', auth=TokenAuthentication())
+@account_controller.get('/me', auth=TokenAuthentication(), response={200: AccountInfo})
 def get_user_info(request):
     user = get_object_or_404(User, id=request.auth['id'])
-    return model_to_dict(user)
+    return user
 
 
 @account_controller.put('/me', auth=TokenAuthentication(), response={200: MessageOut})

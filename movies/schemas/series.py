@@ -18,7 +18,7 @@ class SerialOut(Schema):
     release_date: datetime.date
     rating: Decimal
     categories: list[CategoryOut]
-    actors: list[ActorOut]
+    serial_actors: list[ActorOut]
 
 
 class FullSerialOut(SerialOut):

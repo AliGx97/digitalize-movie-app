@@ -41,12 +41,12 @@ class User(AbstractUser, Entity):
     username = models.NOT_PROVIDED
     email = models.EmailField(_('email address'), unique=True)
     name = models.CharField(max_length=200)
-    profile = models.URLField(null=True)
+    profile = models.URLField(null=True, blank=True)
     is_verified = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
-    gender = models.CharField(max_length=10, null=True)
-    phone = models.CharField(max_length=17, null=True)
-    birth_date = models.DateField(null=True)
+    gender = models.CharField(max_length=10, null=True, blank=True)
+    phone = models.CharField(max_length=17, null=True, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
 
@@ -54,7 +54,7 @@ class User(AbstractUser, Entity):
         return self.email
 
     def has_perm(self, perm, obj=None):
-        return self.is_superuser
+        return perm in self.get_group_permissions()
 
     def has_module_perms(self, app_label):
         return True

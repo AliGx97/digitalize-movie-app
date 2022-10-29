@@ -1,19 +1,20 @@
 from pathlib import Path
-import pretty_errors
 
-pretty_errors.configure(
-    separator_character='*',
-    filename_display=pretty_errors.FILENAME_EXTENDED,
-    line_number_first=True,
-    display_link=True,
-    lines_before=5,
-    lines_after=2,
-    line_color=pretty_errors.RED + '> ' + pretty_errors.default_config.line_color,
-    code_color='  ' + pretty_errors.default_config.line_color,
-    truncate_code=True,
-    display_locals=True
-)
-pretty_errors.replace_stderr()
+# import pretty_errors
+#
+# pretty_errors.configure(
+#     separator_character='*',
+#     filename_display=pretty_errors.FILENAME_EXTENDED,
+#     line_number_first=True,
+#     display_link=True,
+#     lines_before=5,
+#     lines_after=2,
+#     line_color=pretty_errors.RED + '> ' + pretty_errors.default_config.line_color,
+#     code_color='  ' + pretty_errors.default_config.line_color,
+#     truncate_code=True,
+#     display_locals=True
+# )
+# pretty_errors.replace_stderr()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,8 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@0w^vv5o257_t4m*d4r#_^!acd3%7@av$=7@l@&^cdnmzo$vm#'
 SECOND_SECRET_KEY = 'Some-random-secret-key-with-234#@$$-symbols-and-numbers321'
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
+# DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -42,14 +43,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'account',
     'movies',
-    'silk',
+    # 'silk',
     'django_extensions',
 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'silk.middleware.SilkyMiddleware',
+    # 'silk.middleware.SilkyMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

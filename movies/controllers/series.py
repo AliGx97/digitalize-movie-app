@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 from ninja import Router
 from pydantic.types import UUID4
@@ -15,11 +16,14 @@ series_controller = Router(tags=['Series'])
 
 
 @series_controller.get('', response={200: list[SerialOut], 404: MessageOut})
-def list_series(request):
+def list_series(request, page: int = 1):
     series = Serial.objects.prefetch_related('categories', 'serial_actors').all().order_by('title')
-    if series:
-        return 200, series
-    return 404, {'msg': 'There are no series yet.'}
+    if not series:
+        return 404, {'msg': 'There are no series yet.'}
+    data = Paginator(series, 20)
+    if data.num_pages >= page:
+        return 200, list(data.page(page).object_list)
+    return 200, list(data)
 
 
 @series_controller.get('/featured', response={200: list[SerialOut], 404: MessageOut})

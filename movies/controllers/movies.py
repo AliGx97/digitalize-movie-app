@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 from ninja import Router
 from pydantic.types import UUID4
@@ -14,11 +15,14 @@ movies_controller = Router(tags=['Movies'])
 
 
 @movies_controller.get('', response={200: list[MovieOut], 404: MessageOut})
-def list_movies(request):
+def list_movies(request, page: int = 1):
     movies = Movie.objects.prefetch_related('categories', 'movie_actors').all()
-    if movies:
-        return 200, movies
-    return 404, {'msg': 'There are no movies yet.'}
+    if not movies:
+        return 404, {'msg': 'There are no movies yet.'}
+    data = Paginator(movies, 20)
+    if data.num_pages >= page:
+        return 200, list(data.page(page).object_list)
+    return 200, list(data)
 
 
 @movies_controller.get('/featured', response={200: list[MovieOut], 404: MessageOut})

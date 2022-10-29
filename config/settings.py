@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'account',
     'movies',
-    # 'silk',
+    'silk',
     'django_extensions',
 
 ]

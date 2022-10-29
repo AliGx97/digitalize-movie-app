@@ -38,6 +38,22 @@ def favorite_series(request):
     return 404, {'msg': 'There are no featured movies.'}
 
 
+@series_controller.post('/favorites/{id}', auth=TokenAuthentication(), response={200: MessageOut, 404: MessageOut})
+def add_favorite_serial(request, id: UUID4):
+    user = User.objects.get(id=request.auth['id'])
+    serial = get_object_or_404(Serial, id=id)
+    user.favorite_series.add(serial)
+    return 200, {'msg': 'Serial added successfully.'}
+
+
+@series_controller.delete('/favorites/{id}', auth=TokenAuthentication(), response={200: MessageOut, 404: MessageOut})
+def delete_favorite_serial(request, id: UUID4):
+    user = User.objects.get(id=request.auth['id'])
+    serial = get_object_or_404(Serial, id=id)
+    user.favorite_series.remove(serial)
+    return 200, {'msg': 'Serial removed successfully.'}
+
+
 @series_controller.get('/{id}', response={200: FullSerialOut, 404: MessageOut})
 def get_serial(request, id: UUID4):
     try:

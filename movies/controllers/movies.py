@@ -37,6 +37,22 @@ def favorite_movies(request):
     return 404, {'msg': 'There are no featured movies.'}
 
 
+@movies_controller.post('/favorites/{id}', auth=TokenAuthentication(), response={200: MessageOut, 404: MessageOut})
+def add_favorite_movie(request, id: UUID4):
+    user = User.objects.get(id=request.auth['id'])
+    movie = get_object_or_404(Movie, id=id)
+    user.favorite_movies.add(movie)
+    return 200, {'msg': 'Movie added successfully.'}
+
+
+@movies_controller.delete('/favorites/{id}', auth=TokenAuthentication(), response={200: MessageOut, 404: MessageOut})
+def delete_favorite_movie(request, id: UUID4):
+    user = User.objects.get(id=request.auth['id'])
+    movie = get_object_or_404(Movie, id=id)
+    user.favorite_movies.remove(movie)
+    return 200, {'msg': 'Movie removed successfully.'}
+
+
 @movies_controller.get('/{id}', response={200: MovieOut, 404: MessageOut})
 def get_movie(request, id: UUID4):
     try:

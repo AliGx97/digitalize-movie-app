@@ -30,33 +30,27 @@ home_controller = Router(tags=['Home'])
 
 
 @home_controller.get('/search/movies', response={200: list[MovieOut], 404: MessageOut})
-def search_movies(request, q: str = ' ', page: int = 1):
+def search_movies(request, q: str = ' ', limit: int = 5):
     qs = (Q(title__icontains=q) | Q(description__icontains=q))
     movies = Movie.objects.filter(qs).order_by('-rating')
     if not movies:
         return 404, {'msg': 'There are no matches.'}
 
-    data = Paginator(movies, 20)
-    if data.num_pages >= page:
-        return 200, list(data.page(page).object_list)
-    return 200, list(data)
+    return 200, list(movies[:limit])
 
 
 @home_controller.get('/search/series', response={200: list[SerialOut], 404: MessageOut})
-def search_series(request, q: str = ' ', page: int = 1):
+def search_series(request, q: str = ' ', limit: int = 5):
     qs = (Q(title__icontains=q) | Q(description__icontains=q))
     series = Serial.objects.filter(qs).order_by('-rating')
     if not series:
         return 404, {'msg': 'There are no matches.'}
 
-    data = Paginator(series, 20)
-    if data.num_pages >= page:
-        return 200, list(data.page(page).object_list)
-    return 200, list(data)
+    return 200, list(series[:limit])
 
-
-@home_controller.get('all-episodes-of-all-series', response={200: list[AllEpisodes]})
-def get_all_episodes(request):
-    episodes = Episode.objects.prefetch_related('guest_actors', 'season__serial__serial_actors').select_related(
-        'season', 'season__serial').all()
-    return 200, episodes
+#
+# @home_controller.get('all-episodes-of-all-series', response={200: list[AllEpisodes]})
+# def get_all_episodes(request):
+#     episodes = Episode.objects.prefetch_related('guest_actors', 'season__serial__serial_actors').select_related(
+#         'season', 'season__serial').all()
+#     return 200, episodes

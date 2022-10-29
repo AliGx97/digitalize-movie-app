@@ -30,24 +30,25 @@ home_controller = Router(tags=['Home'])
 
 
 @home_controller.get('/search/movies', response={200: list[MovieOut], 404: MessageOut})
-def search_movies(request, q: str = ' ', limit: int = 5):
+def search_movies(request, q: str = ' ', limit: int = None):
     qs = (Q(title__icontains=q) | Q(description__icontains=q))
     movies = Movie.objects.filter(qs).order_by('-rating')
     if not movies:
         return 404, {'msg': 'There are no matches.'}
-
-    return 200, list(movies[:limit])
+    if limit:
+        return 200, list(movies[:limit])
+    return 200, list(movies)
 
 
 @home_controller.get('/search/series', response={200: list[SerialOut], 404: MessageOut})
-def search_series(request, q: str = ' ', limit: int = 5):
+def search_series(request, q: str = ' ', limit: int = None):
     qs = (Q(title__icontains=q) | Q(description__icontains=q))
     series = Serial.objects.filter(qs).order_by('-rating')
     if not series:
         return 404, {'msg': 'There are no matches.'}
-
-    return 200, list(series[:limit])
-
+    if limit:
+        return 200, list(series[:limit])
+    return 200, list(series)
 #
 # @home_controller.get('all-episodes-of-all-series', response={200: list[AllEpisodes]})
 # def get_all_episodes(request):
